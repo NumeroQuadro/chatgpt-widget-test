@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --ink: #18221c;
+        --muted: #68736c;
+        --surface: #f7f5ee;
+        --card: rgba(255, 255, 255, 0.82);
+        --line: rgba(24, 34, 28, 0.11);
+        --accent: #216c49;
+        --accent-soft: #dff4e8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 8px;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: transparent;
+      }
+
+      .shell {
+        position: relative;
+        overflow: hidden;
+        width: min(100%, 620px);
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        padding: 22px;
+        background:
+          radial-gradient(circle at 92% 6%, rgba(255, 180, 96, 0.35), transparent 34%),
+          radial-gradient(circle at 8% 90%, rgba(64, 196, 137, 0.23), transparent 38%),
+          var(--surface);
+        box-shadow: 0 18px 55px rgba(22, 53, 37, 0.11);
+      }
+
+      header,
+      .summary,
+      .actions,
+      .transaction {
+        display: flex;
+        align-items: center;
+      }
+
+      header {
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .eyebrow {
+        margin: 0 0 4px;
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 21px;
+        letter-spacing: -0.03em;
+      }
+
+      .live {
+        border: 1px solid rgba(33, 108, 73, 0.2);
+        border-radius: 999px;
+        padding: 7px 10px;
+        color: var(--accent);
+        background: rgba(255, 255, 255, 0.65);
+        font-size: 11px;
+        font-weight: 750;
+      }
+
+      .live::before {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        margin-right: 6px;
+        border-radius: 50%;
+        background: #34b574;
+        content: "";
+        box-shadow: 0 0 0 4px rgba(52, 181, 116, 0.13);
+      }
+
+      .summary {
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 22px;
+      }
+
+      .amount {
+        font-size: clamp(31px, 8vw, 44px);
+        font-weight: 760;
+        letter-spacing: -0.055em;
+      }
+
+      .caption,
+      .transaction-meta,
+      .status {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .ring {
+        display: grid;
+        width: 88px;
+        height: 88px;
+        flex: 0 0 88px;
+        place-items: center;
+        border-radius: 50%;
+        background: conic-gradient(var(--accent) var(--progress), rgba(33, 108, 73, 0.13) 0);
+      }
+
+      .ring::after {
+        grid-area: 1 / 1;
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: #fbfaf5;
+        content: "";
+      }
+
+      .ring-value {
+        z-index: 1;
+        grid-area: 1 / 1;
+        font-size: 18px;
+        font-weight: 800;
+      }
+
+      .section {
+        margin-top: 22px;
+      }
+
+      .section-title {
+        margin-bottom: 10px;
+        font-size: 13px;
+        font-weight: 750;
+      }
+
+      .category-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .category {
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        padding: 11px 12px;
+        background: var(--card);
+      }
+
+      .category-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 12px;
+      }
+
+      .bar {
+        height: 5px;
+        margin-top: 9px;
+        overflow: hidden;
+        border-radius: 99px;
+        background: rgba(24, 34, 28, 0.08);
+      }
+
+      .bar > span {
+        display: block;
+        width: var(--width);
+        height: 100%;
+        border-radius: inherit;
+        background: var(--color);
+        transition: width 250ms ease;
+      }
+
+      .actions {
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 18px;
+      }
+
+      button {
+        min-height: 38px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 0 13px;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.78);
+        font: inherit;
+        font-size: 12px;
+        font-weight: 720;
+        cursor: pointer;
+        transition: transform 130ms ease, background 130ms ease;
+      }
+
+      button.primary {
+        border-color: var(--accent);
+        color: white;
+        background: var(--accent);
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+      }
+
+      button:disabled {
+        cursor: wait;
+        opacity: 0.6;
+        transform: none;
+      }
+
+      .transaction-list {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--card);
+      }
+
+      .transaction {
+        gap: 10px;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .transaction:last-child {
+        border-bottom: 0;
+      }
+
+      .merchant-icon {
+        display: grid;
+        width: 34px;
+        height: 34px;
+        flex: 0 0 34px;
+        place-items: center;
+        border-radius: 11px;
+        background: var(--accent-soft);
+      }
+
+      .transaction-copy {
+        min-width: 0;
+        flex: 1;
+      }
+
+      .transaction-name {
+        overflow: hidden;
+        font-size: 12px;
+        font-weight: 700;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .transaction-amount {
+        font-size: 12px;
+        font-weight: 760;
+      }
+
+      .status {
+        min-height: 18px;
+        margin-top: 10px;
+      }
+
+      .loading {
+        padding: 54px 12px;
+        text-align: center;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #f0f4f1;
+          --muted: #aab5ae;
+          --surface: #17211b;
+          --card: rgba(33, 47, 39, 0.86);
+          --line: rgba(255, 255, 255, 0.1);
+          --accent: #65d49a;
+          --accent-soft: rgba(101, 212, 154, 0.14);
+        }
+
+        .ring::after {
+          background: #1b261f;
+        }
+
+        button {
+          color: var(--ink);
+          background: rgba(255, 255, 255, 0.07);
+        }
+
+        button.primary {
+          color: #102117;
+          background: var(--accent);
+        }
+      }
+
+      @media (max-width: 440px) {
+        .shell {
+          padding: 18px;
+          border-radius: 22px;
+        }
+
+        .category-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header>
+        <div>
+          <p class="eyebrow">Pocket Pulse · Demo</p>
+          <h1>Spending snapshot</h1>
+        </div>
+        <span class="live">interactive</span>
+      </header>
+
+      <div id="loading" class="loading">
+        <strong>Connecting to ChatGPT…</strong>
+        <p class="status">Waiting for the first tool result.</p>
+      </div>
+
+      <div id="dashboard" hidden>
+        <section class="summary">
+          <div>
+            <p id="period" class="caption"></p>
+            <p id="spent" class="amount"></p>
+            <p id="budget" class="caption"></p>
+          </div>
+          <div id="ring" class="ring" style="--progress: 0%">
+            <span id="ring-value" class="ring-value">0%</span>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">Where it went</h2>
+          <div id="categories" class="category-grid"></div>
+        </section>
+
+        <div class="actions">
+          <button class="primary" data-expense="coffee">+ Coffee · ₽350</button>
+          <button data-expense="metro">+ Metro · ₽75</button>
+          <button id="reset">Reset demo</button>
+        </div>
+        <p id="status" class="status" aria-live="polite"></p>
+
+        <section class="section">
+          <h2 class="section-title">Recent demo activity</h2>
+          <div id="transactions" class="transaction-list"></div>
+        </section>
+      </div>
+    </main>
+
+    <script type="module">
+      const elements = {
+        loading: document.querySelector("#loading"),
+        dashboard: document.querySelector("#dashboard"),
+        period: document.querySelector("#period"),
+        spent: document.querySelector("#spent"),
+        budget: document.querySelector("#budget"),
+        ring: document.querySelector("#ring"),
+        ringValue: document.querySelector("#ring-value"),
+        categories: document.querySelector("#categories"),
+        transactions: document.querySelector("#transactions"),
+        status: document.querySelector("#status"),
+        reset: document.querySelector("#reset"),
+        buttons: [...document.querySelectorAll("button")],
+      };
+
+      const money = new Intl.NumberFormat("ru-RU", {
+        style: "currency",
+        currency: "RUB",
+        maximumFractionDigits: 0,
+      });
+
+      let currentState;
+      let rpcId = 0;
+      const pendingRequests = new Map();
+
+      const escapeHtml = (value) =>
+        String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+
+      function render(nextState) {
+        if (!nextState?.categories || !nextState?.transactions) return;
+        currentState = nextState;
+        elements.loading.hidden = true;
+        elements.dashboard.hidden = false;
+
+        const progress = Math.min(100, Math.round((nextState.spent / nextState.budget) * 100));
+        const maxCategory = Math.max(...nextState.categories.map((item) => item.amount), 1);
+
+        elements.period.textContent = nextState.period;
+        elements.spent.textContent = money.format(nextState.spent);
+        elements.budget.textContent = `${money.format(nextState.budget - nextState.spent)} left of ${money.format(nextState.budget)}`;
+        elements.ring.style.setProperty("--progress", `${progress}%`);
+        elements.ringValue.textContent = `${progress}%`;
+
+        elements.categories.innerHTML = nextState.categories
+          .map(
+            (item) => `
+              <article class="category">
+                <div class="category-top">
+                  <span>${escapeHtml(item.emoji)} ${escapeHtml(item.name)}</span>
+                  <strong>${money.format(item.amount)}</strong>
+                </div>
+                <div class="bar"><span style="--width: ${(item.amount / maxCategory) * 100}%; --color: ${escapeHtml(item.color)}"></span></div>
+              </article>`,
+          )
+          .join("");
+
+        elements.transactions.innerHTML = nextState.transactions
+          .map(
+            (item) => `
+              <div class="transaction">
+                <span class="merchant-icon">${escapeHtml(item.emoji)}</span>
+                <div class="transaction-copy">
+                  <p class="transaction-name">${escapeHtml(item.merchant)}</p>
+                  <p class="transaction-meta">${escapeHtml(item.category)} · ${escapeHtml(item.time)}</p>
+                </div>
+                <span class="transaction-amount">−${money.format(item.amount)}</span>
+              </div>`,
+          )
+          .join("");
+      }
+
+      function rpcNotify(method, params) {
+        window.parent.postMessage({ jsonrpc: "2.0", method, params }, "*");
+      }
+
+      function rpcRequest(method, params) {
+        return new Promise((resolve, reject) => {
+          const id = ++rpcId;
+          pendingRequests.set(id, { resolve, reject });
+          window.parent.postMessage({ jsonrpc: "2.0", id, method, params }, "*");
+        });
+      }
+
+      window.addEventListener(
+        "message",
+        (event) => {
+          if (event.source !== window.parent) return;
+          const message = event.data;
+          if (!message || message.jsonrpc !== "2.0") return;
+
+          if (message.id !== undefined && pendingRequests.has(message.id)) {
+            const pending = pendingRequests.get(message.id);
+            pendingRequests.delete(message.id);
+            if (message.error) pending.reject(message.error);
+            else pending.resolve(message.result);
+            return;
+          }
+
+          if (message.method === "ui/notifications/tool-result") {
+            render(message.params?.structuredContent ?? message.params);
+          }
+        },
+        { passive: true },
+      );
+
+      const bridgeReady = rpcRequest("ui/initialize", {
+        appInfo: { name: "pocket-pulse-widget", version: "0.1.0" },
+        appCapabilities: {},
+        protocolVersion: "2026-01-26",
+      }).then(() => rpcNotify("ui/notifications/initialized", {}));
+
+      async function callTool(name, args, pendingMessage) {
+        elements.buttons.forEach((button) => (button.disabled = true));
+        elements.status.textContent = pendingMessage;
+        try {
+          await bridgeReady;
+          const result = await rpcRequest("tools/call", { name, arguments: args });
+          render(result?.structuredContent ?? result);
+          elements.status.textContent = `✓ Widget ↔ MCP interaction ${currentState?.interactionCount ?? 0} completed`;
+        } catch (error) {
+          console.error(error);
+          elements.status.textContent = "Could not call the MCP tool. Check the browser console.";
+        } finally {
+          elements.buttons.forEach((button) => (button.disabled = false));
+        }
+      }
+
+      document.querySelectorAll("[data-expense]").forEach((button) => {
+        button.addEventListener("click", () =>
+          callTool(
+            "add_demo_expense",
+            { kind: button.dataset.expense },
+            "Sending a real tool call…",
+          ),
+        );
+      });
+
+      elements.reset.addEventListener("click", () =>
+        callTool("reset_demo_spending", {}, "Resetting the in-memory demo…"),
+      );
+    </script>
+  </body>
+</html>

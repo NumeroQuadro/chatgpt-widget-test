@@ -1,0 +1,18 @@
+services:
+  widget-test:
+    build: .
+    image: chatgpt-widget-test:0.1.0
+    container_name: chatgpt-widget-test
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "8787"
+    ports:
+      - "127.0.0.1:2096:8787"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL

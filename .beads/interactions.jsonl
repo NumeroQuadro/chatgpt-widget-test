@@ -1,0 +1,2 @@
+{"id":"int-6fb34e08a24fa9b68a784a4ae9c434d3","kind":"field_change","created_at":"2026-09-14T17:42:14.10402Z","actor":"NumeroQuadro","issue_id":"cwt-8lo","extra":{"field":"status","new_value":"in_progress","old_value":"open"}}
+{"id":"int-fdf17f31159df80fd0e128524be57b12","kind":"field_change","created_at":"2026-09-14T17:51:04.861312Z","actor":"NumeroQuadro","issue_id":"cwt-8lo","extra":{"field":"status","new_value":"closed","old_value":"in_progress","reason":"Implemented, tested locally and through the production HTTPS MCP endpoint, documented, and deployed."}}
